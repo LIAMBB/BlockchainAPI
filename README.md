@@ -28,15 +28,6 @@ To start the HTTP server, run the following command:
 
 By default, the server listens on port 8080. You can access it by opening http://localhost:8080 in your web browser.
 
-API Endpoints
-The HTTP server provides the following API endpoints:
-
-GET /address/history: Retrieves the transaction history for a specific Bitcoin address.
-GET /address/balance: Retrieves the balance for a specific Bitcoin address.
-GET /address/unspent: Retrieves the list of unspent transaction outputs (UTXOs) for a specific Bitcoin address.
-POST /transaction/broadcast: Broadcasts a Bitcoin transaction to the network.
-GET /transaction/:id: Retrieves information about a specific transaction identified by its ID.
-GET /block/header: Retrieves the header of the newest block in the Bitcoin blockchain.
 Contributing
 Contributions to this project are welcome. If you find any issues or want to add new features, please follow these steps:
 
