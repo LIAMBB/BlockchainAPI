@@ -9,6 +9,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type History struct {
+	Height int    `json:"height"`
+	TxHash string `json:"tx_hash"`
+}
+
+type HistoryResponse struct {
+	ID      int       `json:"id"`
+	JSONRPC string    `json:"jsonrpc"`
+	Result  []History `json:"result"`
+}
+
 type UnspentResponse struct {
 	ID      int           `json:"id"`
 	JSONRPC string        `json:"jsonrpc"`
@@ -41,8 +52,8 @@ func main() {
 
 	router := gin.Default()
 
-	// // AddressHistory endpoint
-	// router.GET("/address/history", getAddressHistory)
+	// AddressHistory endpoint
+	router.GET("/address/history", getAddressHistory)
 
 	// AddressBalance endpoint
 	router.GET("/address/balance", getAddressBalance)
@@ -63,9 +74,31 @@ func main() {
 	router.Run(":8080")
 }
 
-// // AddressHistory endpoint handler
-// func getAddressHistory(c *gin.Context) {
-// }
+// AddressHistory endpoint handler
+func getAddressHistory(c *gin.Context) {
+	// Get address from query parameter
+	var requestBody BalanceRequestBody
+
+	// Bind the JSON content to the RequestBody struct
+	if err := c.ShouldBindJSON(&requestBody); err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+
+	// TODO: Implement AddressBalance logic
+	scriphash, _ := electrum.AddressToElectrumScriptHash(requestBody.Address)
+	jsonResponse := Electrsinterface("blockchain.scripthash.get_history", []interface{}{scriphash})
+	fmt.Println("=========================================")
+
+	var response HistoryResponse
+	err := json.Unmarshal([]byte(jsonResponse), &response)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+
+	c.JSON(http.StatusOK, response.Result)
+}
 
 // AddressBalance endpoint handler
 func getAddressBalance(c *gin.Context) {
@@ -78,7 +111,7 @@ func getAddressBalance(c *gin.Context) {
 		return
 	}
 
-	// TODO: Implement AddressBalance logic
+	// Converts Address to Electrum ScriptHash then makes a request through the ElectrsInterface
 	scriphash, _ := electrum.AddressToElectrumScriptHash(requestBody.Address)
 	jsonResponse := Electrsinterface("blockchain.scripthash.get_balance", []interface{}{scriphash})
 
