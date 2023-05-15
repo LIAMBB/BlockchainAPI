@@ -7,9 +7,11 @@ import (
 	"net"
 )
 
+const electrsURL = "127.0.0.1:50001"
+
 func Electrsinterface(method string, params []interface{}) string {
 	// Establish a TCP connection to the server
-	conn, err := net.Dial("tcp", "127.0.0.1:50001")
+	conn, err := net.Dial("tcp", electrsURL)
 	if err != nil {
 		return ""
 	}
