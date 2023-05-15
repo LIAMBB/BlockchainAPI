@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/checksum0/go-electrum/electrum"
+	"github.com/davecgh/go-spew/spew"
 	"github.com/gin-gonic/gin"
 )
 
@@ -44,8 +45,18 @@ type Balance struct {
 	Unconfirmed int64 `json:"unconfirmed"`
 }
 
-type BalanceRequestBody struct {
+type TxBroadcastResponse struct {
+	ID      int    `json:"id"`
+	JSONRPC string `json:"jsonrpc"`
+	Result  string `json:"result"`
+}
+
+type AddrRequestBody struct {
 	Address string `json:"address"`
+}
+
+type TxBroadcastRequestBody struct {
+	RawTransaction string `json:"rawTx"`
 }
 
 func main() {
@@ -61,8 +72,8 @@ func main() {
 	// AddressListUnspent endpoint
 	router.GET("/address/unspent", getAddressListUnspent)
 
-	// // TransactionBroadcast endpoint
-	// router.POST("/transaction/broadcast", postTransactionBroadcast)
+	// TransactionBroadcast endpoint
+	router.POST("/transaction/broadcast", postTransactionBroadcast)
 
 	// // GetTransaction endpoint
 	// router.GET("/transaction/:id", getTransaction)
@@ -77,7 +88,7 @@ func main() {
 // AddressHistory endpoint handler
 func getAddressHistory(c *gin.Context) {
 	// Get address from query parameter
-	var requestBody BalanceRequestBody
+	var requestBody AddrRequestBody
 
 	// Bind the JSON content to the RequestBody struct
 	if err := c.ShouldBindJSON(&requestBody); err != nil {
@@ -103,7 +114,7 @@ func getAddressHistory(c *gin.Context) {
 // AddressBalance endpoint handler
 func getAddressBalance(c *gin.Context) {
 	// Get address from query parameter
-	var requestBody BalanceRequestBody
+	var requestBody AddrRequestBody
 
 	// Bind the JSON content to the RequestBody struct
 	if err := c.ShouldBindJSON(&requestBody); err != nil {
@@ -128,7 +139,7 @@ func getAddressBalance(c *gin.Context) {
 // AddressListUnspent endpoint handler
 func getAddressListUnspent(c *gin.Context) {
 	// Get address from query parameter
-	var requestBody BalanceRequestBody
+	var requestBody AddrRequestBody
 
 	// Bind the JSON content to the RequestBody struct
 	if err := c.ShouldBindJSON(&requestBody); err != nil {
@@ -150,10 +161,31 @@ func getAddressListUnspent(c *gin.Context) {
 	c.JSON(http.StatusOK, response.Result)
 }
 
-// // TransactionBroadcast endpoint handler
-// func postTransactionBroadcast(c *gin.Context) {
-// 	// TODO: Implement TransactionBroadcast logic
-// }
+// TransactionBroadcast endpoint handler
+func postTransactionBroadcast(c *gin.Context) {
+	// Get address from query parameter
+	var requestBody TxBroadcastRequestBody
+
+	// Bind the JSON content to the RequestBody struct
+	if err := c.ShouldBindJSON(&requestBody); err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+	jsonResponse := Electrsinterface("blockchain.transaction.broadcast", []interface{}{requestBody.RawTransaction})
+	fmt.Println("======================================================")
+	spew.Dump(jsonResponse)
+	fmt.Println("======================================================")
+
+	var response TxBroadcastResponse
+	err := json.Unmarshal([]byte(jsonResponse), &response)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+
+	c.JSON(http.StatusOK, response.Result)
+
+}
 
 // // GetTransaction endpoint handler
 // func getTransaction(c *gin.Context) {
