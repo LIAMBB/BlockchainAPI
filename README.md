@@ -13,8 +13,6 @@ This repository contains a GoLang component that serves as an HTTP server acting
 
 Install the required dependencies:
 
-bash
-Copy code
     
     go mod download
 Configuration
