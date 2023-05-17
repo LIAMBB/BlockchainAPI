@@ -59,8 +59,11 @@ type TxBroadcastRequestBody struct {
 	RawTransaction string `json:"rawTx"`
 }
 
-func main() {
+var blocks []BlockData
 
+func main() {
+	blocks = make([]BlockData, 0)
+	go BlockWatcher(&blocks)
 	router := gin.Default()
 
 	// AddressHistory endpoint
@@ -78,8 +81,8 @@ func main() {
 	// // GetTransaction endpoint
 	// router.GET("/transaction/:id", getTransaction)
 
-	// // GetNewestBlockHeader endpoint
-	// router.GET("/block/header", getNewestBlockHeader)
+	// GetNewestBlockHeader endpoint
+	router.GET("/block/header", getNewestBlockHeader)
 
 	// Run the server
 	router.Run(":8080")
@@ -192,7 +195,10 @@ func postTransactionBroadcast(c *gin.Context) {
 // 	// TODO: Implement GetTransaction logic
 // }
 
-// // GetNewestBlockHeader endpoint handler
-// func getNewestBlockHeader(c *gin.Context) {
-// 	// TODO: Implement GetNewestBlockHeader logic
-// }
+// GetNewestBlockHeader endpoint handler
+func getNewestBlockHeader(c *gin.Context) {
+	// TODO: Implement GetNewestBlockHeader logic
+
+	c.JSON(http.StatusOK, blocks[:len(blocks)-1])
+
+}
