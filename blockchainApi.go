@@ -59,6 +59,10 @@ type TxBroadcastRequestBody struct {
 	RawTransaction string `json:"rawTx"`
 }
 
+type GetTxRequestBody struct {
+	TxID string `json:"txid"`
+}
+
 var blocks []BlockData
 
 func main() {
@@ -190,10 +194,30 @@ func postTransactionBroadcast(c *gin.Context) {
 
 }
 
-// // GetTransaction endpoint handler
-// func getTransaction(c *gin.Context) {
-// 	// TODO: Implement GetTransaction logic
-// }
+// GetTransaction endpoint handler
+func getTransaction(c *gin.Context) {
+	// TODO: Implement GetTransaction logic
+	// Get TxID from query parameter
+	var requestBody GetTxRequestBody
+
+	// Bind the JSON content to the RequestBody struct
+	if err := c.ShouldBindJSON(&requestBody); err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+
+	// TODO: Implement AddressBalance logic
+	jsonResponse := Electrsinterface("blockchain.transaction.get", []interface{}{requestBody.TxID, true})
+
+	var response UnspentResponse
+	err := json.Unmarshal([]byte(jsonResponse), &response)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+
+	c.JSON(http.StatusOK, response.Result)
+}
 
 // GetNewestBlockHeader endpoint handler
 func getNewestBlockHeader(c *gin.Context) {
