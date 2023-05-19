@@ -85,9 +85,5 @@ func BlockWatcher(blocks *[]HeaderResult) {
 		temp := *blocks
 		temp = append(temp, response.Result)
 		*blocks = temp
-		fmt.Println("==============================")
-		fmt.Println(blocks)
-		fmt.Println("==============================")
 	}
-
 }
