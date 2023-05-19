@@ -222,7 +222,7 @@ func getTransaction(c *gin.Context) {
 // GetNewestBlockHeader endpoint handler
 func getNewestBlockHeader(c *gin.Context) {
 	// TODO: Implement GetNewestBlockHeader logic
-
+	fmt.Println(blocks)
 	c.JSON(http.StatusOK, blocks[:len(blocks)-1])
 
 }
