@@ -77,10 +77,6 @@ func BlockWatcher(blocks *[]HeaderResult) {
 			//Error Handling TODO
 		}
 
-		fmt.Println("===========================================")
-		fmt.Println(string(responseBytes))
-		fmt.Println("===========================================")
-
 		var response HeaderSubscription
 		err = json.Unmarshal(responseBytes, &response)
 		if err != nil {
@@ -89,6 +85,9 @@ func BlockWatcher(blocks *[]HeaderResult) {
 		temp := *blocks
 		temp = append(temp, response.Result)
 		*blocks = temp
+		fmt.Println("==============================")
+		fmt.Println(blocks)
+		fmt.Println("==============================")
 	}
 
 }
