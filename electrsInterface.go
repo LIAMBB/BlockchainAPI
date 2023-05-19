@@ -83,6 +83,10 @@ func BlockWatcher(blocks *[]BlockData) {
 			//Error Handling TODO
 		}
 
+		fmt.Println("===========================================")
+		fmt.Println(string(responseBytes))
+		fmt.Println("===========================================")
+
 		var response BlockHeaderResponse
 		err = json.Unmarshal(responseBytes, &response)
 		if err != nil {
