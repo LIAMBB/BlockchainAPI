@@ -63,8 +63,10 @@ type GetTxRequestBody struct {
 	TxID string `json:"txid"`
 }
 
+// Variable of all the block headers occuring since the the server starts up
 var blocks []HeaderResult
 
+// Main initializes the API endpoints and runs the API server on port 8080
 func main() {
 	blocks = make([]HeaderResult, 0)
 	go BlockWatcher(&blocks)

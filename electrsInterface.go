@@ -19,6 +19,7 @@ type HeaderResult struct {
 	Hex    string `json:"hex"`
 }
 
+// This is an interface that sends requests to the Electrum Server through TCP
 func Electrsinterface(method string, params []interface{}) string {
 	// Establish a TCP connection to the server
 	conn, err := net.Dial("tcp", electrsURL)
@@ -50,6 +51,9 @@ func Electrsinterface(method string, params []interface{}) string {
 	return string(responseBytes)
 }
 
+// This function subscribes to the BlockHeaders of the blockchain from Electrum
+// Updates a Variable that is accessible in the blockheader endpoint to be returned
+// This function should run on it's own thread in the background
 func BlockWatcher(blocks *[]HeaderResult) {
 	conn, err := net.Dial("tcp", electrsURL)
 	if err != nil {
