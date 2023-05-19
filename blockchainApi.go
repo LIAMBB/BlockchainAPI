@@ -63,10 +63,10 @@ type GetTxRequestBody struct {
 	TxID string `json:"txid"`
 }
 
-var blocks []BlockData
+var blocks []HeaderResult
 
 func main() {
-	blocks = make([]BlockData, 0)
+	blocks = make([]HeaderResult, 0)
 	go BlockWatcher(&blocks)
 	router := gin.Default()
 

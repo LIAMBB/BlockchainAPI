@@ -9,20 +9,14 @@ import (
 
 const electrsURL = "127.0.0.1:50001"
 
-type BlockHeaderResponse struct {
-	ID     int       `json:"id"`
-	Result BlockData `json:"result"`
+type HeaderSubscription struct {
+	ID     int          `json:"id"`
+	Result HeaderResult `json:"result"`
 }
 
-type BlockData struct {
-	Nonce         uint32 `json:"nonce"`
-	PrevBlockHash string `json:"prev_block_hash"`
-	Timestamp     int64  `json:"timestamp"`
-	MerkleRoot    string `json:"merkle_root"`
-	BlockHeight   int    `json:"block_height"`
-	UTXORoot      string `json:"utxo_root"`
-	Version       int    `json:"version"`
-	Bits          int    `json:"bits"`
+type HeaderResult struct {
+	Height int    `json:"height"`
+	Hex    string `json:"hex"`
 }
 
 func Electrsinterface(method string, params []interface{}) string {
@@ -56,7 +50,7 @@ func Electrsinterface(method string, params []interface{}) string {
 	return string(responseBytes)
 }
 
-func BlockWatcher(blocks *[]BlockData) {
+func BlockWatcher(blocks *[]HeaderResult) {
 	conn, err := net.Dial("tcp", electrsURL)
 	if err != nil {
 		//Error Out TODO
@@ -87,7 +81,7 @@ func BlockWatcher(blocks *[]BlockData) {
 		fmt.Println(string(responseBytes))
 		fmt.Println("===========================================")
 
-		var response BlockHeaderResponse
+		var response HeaderSubscription
 		err = json.Unmarshal(responseBytes, &response)
 		if err != nil {
 			// Error Handling TODO
