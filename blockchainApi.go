@@ -88,7 +88,7 @@ func main() {
 	// router.GET("/transaction/:id", getTransaction)
 
 	// GetNewestBlockHeader endpoint
-	router.GET("/block/header", getNewestBlockHeader)
+	router.GET("/block/header/new", getNewestBlockHeader)
 
 	// Run the server
 	router.Run(":8080")
