@@ -262,7 +262,7 @@ func getTransaction(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, response.Result)
+	c.JSON(http.StatusOK, response)
 }
 
 // GetNewestBlockHeader endpoint handler
