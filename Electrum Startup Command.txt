@@ -1,0 +1,4 @@
+electrs --log-filters INFO --timestamp --db-dir /home/liam/electrs-db --electrum-rpc-addr="127.0.0.1:50001" --network=regtest --cookie-file=$HOME/.bitcoin/regtest/.cookie
+
+Note that you should change the --db-dir to the equivalent for your local user
+You can also store it in tmp but if you reboot and restart the database will have to be rebuilt
