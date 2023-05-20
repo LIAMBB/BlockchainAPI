@@ -63,6 +63,12 @@ type GetTxRequestBody struct {
 	TxID string `json:"txid"`
 }
 
+type GetTxResponse struct {
+	ID      int         `json:"id"`
+	JSONRPC string      `json:"jsonrpc"`
+	Result  Transaction `json:"result"`
+}
+
 type Transaction struct {
 	ID            string   `json:"txid"`
 	Hash          string   `json:"hash"`
@@ -248,8 +254,8 @@ func getTransaction(c *gin.Context) {
 	// TODO: Implement AddressBalance logic
 
 	jsonResponse := Electrsinterface("blockchain.transaction.get", []interface{}{requestBody.TxID, true})
-	var transaction Transaction
-	err := json.Unmarshal([]byte(jsonResponse), &transaction)
+	var response GetTxResponse
+	err := json.Unmarshal([]byte(jsonResponse), &response)
 	if err != nil {
 		fmt.Println("Error:", err)
 		return
@@ -258,10 +264,10 @@ func getTransaction(c *gin.Context) {
 	fmt.Println("========================================")
 	fmt.Println(jsonResponse)
 	fmt.Println("========================================")
-	spew.Dump(transaction)
+	spew.Dump(response)
 	fmt.Println("========================================")
 
-	c.JSON(http.StatusOK, transaction)
+	c.JSON(http.StatusOK, response.Result)
 }
 
 // GetNewestBlockHeader endpoint handler
