@@ -114,6 +114,7 @@ var blocks []HeaderResult
 func main() {
 	blocks = make([]HeaderResult, 0)
 	go BlockWatcher(&blocks)
+
 	router := gin.Default()
 
 	// AddressHistory endpoint
