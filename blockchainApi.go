@@ -85,7 +85,7 @@ func main() {
 	router.POST("/transaction/broadcast", postTransactionBroadcast)
 
 	// GetTransaction endpoint
-	router.GET("/transaction/:id", getTransaction)
+	router.GET("/transaction/get", getTransaction)
 
 	// GetNewestBlockHeader endpoint
 	router.GET("/block/header/new", getNewestBlockHeader)
