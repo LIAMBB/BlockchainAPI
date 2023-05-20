@@ -246,20 +246,22 @@ func getTransaction(c *gin.Context) {
 	spew.Dump(requestBody)
 
 	// TODO: Implement AddressBalance logic
-	jsonResponse := Electrsinterface("blockchain.transaction.get", []interface{}{requestBody.TxID, true})
 
-	var response Transaction
-	err := json.Unmarshal([]byte(jsonResponse), &response)
+	jsonResponse := Electrsinterface("blockchain.transaction.get", []interface{}{requestBody.TxID, true})
+	var transaction Transaction
+	err := json.Unmarshal([]byte(jsonResponse), &transaction)
 	if err != nil {
 		fmt.Println("Error:", err)
 		return
 	}
 
 	fmt.Println("========================================")
-	spew.Dump(response)
+	fmt.Println(jsonResponse)
+	fmt.Println("========================================")
+	spew.Dump(transaction)
 	fmt.Println("========================================")
 
-	c.JSON(http.StatusOK, response)
+	c.JSON(http.StatusOK, transaction)
 }
 
 // GetNewestBlockHeader endpoint handler
