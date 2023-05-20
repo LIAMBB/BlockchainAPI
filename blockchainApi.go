@@ -63,6 +63,44 @@ type GetTxRequestBody struct {
 	TxID string `json:"txid"`
 }
 
+type Transaction struct {
+	ID            string   `json:"txid"`
+	Hash          string   `json:"hash"`
+	BlockHash     string   `json:"blockhash"`
+	BlockTime     int64    `json:"blocktime"`
+	Confirmations int      `json:"confirmations"`
+	Size          int      `json:"size"`
+	VirtualSize   int      `json:"vsize"`
+	Weight        int      `json:"weight"`
+	Version       int      `json:"version"`
+	LockTime      int      `json:"locktime"`
+	Time          int64    `json:"time"`
+	InActiveChain bool     `json:"in_active_chain"`
+	Hex           string   `json:"hex"`
+	Vin           []Input  `json:"vin"`
+	Vout          []Output `json:"vout"`
+}
+
+type Input struct {
+	Coinbase    string   `json:"coinbase"`
+	Sequence    uint32   `json:"sequence"`
+	TxInWitness []string `json:"txinwitness"`
+}
+
+type Output struct {
+	N            int     `json:"n"`
+	Value        float64 `json:"value"`
+	ScriptPubKey PubKey  `json:"scriptPubKey"`
+}
+
+type PubKey struct {
+	Address string `json:"address"`
+	Asm     string `json:"asm"`
+	Desc    string `json:"desc"`
+	Hex     string `json:"hex"`
+	Type    string `json:"type"`
+}
+
 // Variable of all the block headers occuring since the the server starts up
 var blocks []HeaderResult
 
@@ -217,7 +255,7 @@ func getTransaction(c *gin.Context) {
 	fmt.Println(jsonResponse)
 	fmt.Println("========================================")
 
-	var response UnspentResponse
+	var response Transaction
 	err := json.Unmarshal([]byte(jsonResponse), &response)
 	if err != nil {
 		fmt.Println("Error:", err)
