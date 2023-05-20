@@ -219,9 +219,6 @@ func postTransactionBroadcast(c *gin.Context) {
 		return
 	}
 	jsonResponse := Electrsinterface("blockchain.transaction.broadcast", []interface{}{requestBody.RawTransaction})
-	fmt.Println("======================================================")
-	spew.Dump(jsonResponse)
-	fmt.Println("======================================================")
 
 	var response TxBroadcastResponse
 	err := json.Unmarshal([]byte(jsonResponse), &response)
@@ -251,16 +248,16 @@ func getTransaction(c *gin.Context) {
 	// TODO: Implement AddressBalance logic
 	jsonResponse := Electrsinterface("blockchain.transaction.get", []interface{}{requestBody.TxID, true})
 
-	fmt.Println("========================================")
-	fmt.Println(jsonResponse)
-	fmt.Println("========================================")
-
 	var response Transaction
 	err := json.Unmarshal([]byte(jsonResponse), &response)
 	if err != nil {
 		fmt.Println("Error:", err)
 		return
 	}
+
+	fmt.Println("========================================")
+	spew.Dump(response)
+	fmt.Println("========================================")
 
 	c.JSON(http.StatusOK, response)
 }
